@@ -19,11 +19,11 @@ struct ContentView: View {
 	
 	var body: some View {
 		NavigationStack {
-			List(devices, id: \.self) { devices in
+			List(devices, id: \.self) { device in
 				NavigationLink {
-					DeviceOverview(name: devices)
+					DeviceProfilesView(device: device)
 				} label: {
-					Text(devices)
+					Text(device)
 				}
 			}
 			.navigationTitle("Thermostate")
