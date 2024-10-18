@@ -34,6 +34,5 @@ struct DeviceWeekView: View {
 			.listStyle(PlainListStyle())
 //			.navigationBarTitleDisplayMode(.inline)
 		}
-		
 	}
 }

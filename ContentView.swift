@@ -30,7 +30,6 @@ struct ContentView: View {
 			.listStyle(PlainListStyle())
 //			.navigationBarTitleDisplayMode(.inline)
 		}
-		
 	}
 }
 

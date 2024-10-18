@@ -29,6 +29,5 @@ struct DeviceProfilesView: View {
 			.listStyle(PlainListStyle())
 //			.navigationBarTitleDisplayMode(.inline)
 		}
-		
 	}
 }

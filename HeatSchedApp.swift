@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct HeatSchedApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
+	var body: some Scene {
+		WindowGroup {
+//			ContentView()
+			DeviceDayView(device: "Wohnzimmer", profile: "Profil 1", weekDay: "Montag")
+		}
+	}
 }
