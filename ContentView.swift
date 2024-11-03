@@ -16,7 +16,7 @@ struct ContentView: View {
 		"Küche",
 		"Bad"
 	]
-	
+
 	var body: some View {
 		NavigationStack {
 			List(devices, id: \.self) { device in
