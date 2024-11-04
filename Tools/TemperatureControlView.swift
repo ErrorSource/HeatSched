@@ -16,10 +16,10 @@ let config = Config(
 )
 
 struct TemperatureControlView: View {
-	@Binding var targetTemp: CGFloat
+	@Binding var targetTemp: Double
 	@State private var angleValue: CGFloat = 0.0
 	
-	init(targetTemp: Binding<CGFloat>) {
+	init(targetTemp: Binding<Double>) {
 		self._targetTemp = targetTemp
 		_angleValue = State(initialValue: calcAngelFromTargetTemp(targetTemp: targetTemp.wrappedValue))
 	}
@@ -48,15 +48,15 @@ struct TemperatureControlView: View {
 				.offset(y: -config.radius)
 				.rotationEffect(Angle.degrees(Double(angleValue)))
 				.gesture(DragGesture(minimumDistance: 0.0)
-				.onChanged({ value in
-					change(location: value.location)
-				}))
+					.onChanged { value in
+						change(location: value.location)
+					})
 			
-			Text("\(String.init(format: "%.1f", targetTemp))ºC")
+			Text("\(String(format: "%.1f", targetTemp))ºC")
 				.font(.system(size: 60))
 				.foregroundColor((targetTemp <= config.lowValue) ? Color.blue : Color.red)
 		}
-		.onChange(of: targetTemp) { _ in
+		.onChange(of: targetTemp) {
 			angleValue = calcAngelFromTargetTemp(targetTemp: targetTemp)
 		}
 	}
@@ -66,13 +66,13 @@ struct TemperatureControlView: View {
 		let vector = CGVector(dx: location.x, dy: location.y)
 		
 		// geting angle in radian need to subtract the knob radius and padding from the dy and dx
-		let angle = atan2(vector.dy - (config.knobRadius + 10), vector.dx - (config.knobRadius + 10)) + .pi/2.0
+		let angle = atan2(vector.dy - (config.knobRadius + 10), vector.dx - (config.knobRadius + 10)) + .pi / 2.0
 		
 		// convert angle range from (-pi to pi) to (0 to 2pi)
 		let fixedAngle = (angle < 0.0) ? angle + 2.0 * .pi : angle
 		
 		// convert angle value to temperature value
-		let value = CGFloat(roundf(Float(fixedAngle / (2.0 * .pi) * (config.maximumValue - config.minimumValue)) * 2.0 ) * 0.5) + config.minimumValue
+		let value = CGFloat(roundf(Float(fixedAngle / (2.0 * .pi) * (config.maximumValue - config.minimumValue)) * 2.0) * 0.5) + config.minimumValue
 		
 		if value >= config.minimumValue && value <= config.maximumValue {
 			targetTemp = value
@@ -81,7 +81,7 @@ struct TemperatureControlView: View {
 	}
 }
 
-func calcAngelFromTargetTemp(targetTemp: CGFloat) -> CGFloat {
+func calcAngelFromTargetTemp(targetTemp: Double) -> Double {
 	return ((((targetTemp - config.minimumValue) / 0.5) / 2.0) / (config.maximumValue - config.minimumValue) * 360)
 }
 

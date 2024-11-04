@@ -10,7 +10,7 @@ import SwiftUI
 struct DeviceWeekView: View {
 	let device: String
 	let profile: String
-	
+
 	let weekDays = [
 		"Montag",
 		"Dienstag",
@@ -20,7 +20,7 @@ struct DeviceWeekView: View {
 		"Samstag",
 		"Sonntag"
 	]
-	
+
 	var body: some View {
 		NavigationStack {
 			List(weekDays, id: \.self) { weekDay in
