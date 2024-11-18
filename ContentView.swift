@@ -2,21 +2,10 @@
 //  ContentView.swift
 //  HeatSched
 //
-//  Created by Georg Kemser on 25.02.23.
-//
 
 import SwiftUI
 
 struct ContentView: View {
-	let devices = [
-		"Wohnzimmer",
-		"Esszimmer",
-		"Arbeitszimmer",
-		"Kinderzimmer",
-		"Küche",
-		"Bad"
-	]
-
 	var body: some View {
 		NavigationStack {
 			List(devices, id: \.self) { device in

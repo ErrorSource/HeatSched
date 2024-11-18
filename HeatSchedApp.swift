@@ -2,8 +2,6 @@
 //  HeatSchedApp.swift
 //  HeatSched
 //
-//  Created by Georg Kemser on 25.02.23.
-//
 
 import SwiftUI
 import SwiftData
@@ -15,6 +13,6 @@ struct HeatSchedApp: App {
 //			ContentView()
 			DeviceDayView(device: "Wohnzimmer", profile: "Profil 1", weekDay: "Montag")
 		}
-		.modelContainer(for: HMSegment.self)
+		.modelContainer(for: [HMSegment.self], isAutosaveEnabled: false)
 	}
 }

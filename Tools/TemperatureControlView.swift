@@ -2,8 +2,6 @@
 //  TemperatureControlView.swift
 //  HeatSched
 //
-//  Created by Georg Kemser on 17.10.24.
-//
 
 import SwiftUI
 

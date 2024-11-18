@@ -2,23 +2,19 @@
 //  EditTempChangeView.swift
 //  HeatSched
 //
-//  Created by Georg Kemser on 02.11.24.
-//
 
 import SwiftUI
-import SwiftData
 
 struct EditSegmentView: View {
 	@Bindable var segment: HMSegment
+	@Binding var neighbours: (left: HMSegment?, right: HMSegment?)
 	
 	@Environment(\.dismiss) var dismiss
 	
 	// initial tab-/button-selection of tabbar [ start | temp | end ]
 	@State private var selectedOption: Int = 2
 	
-//	@State var targetTemp: CGFloat = 20.5
-//	@State var targetFromDate: Date = minutes2Date(minutes: 375)
-//	@State var targetTillDate: Date = minutes2Date(minutes: 950)
+	let returnAction: (_ type: buttonAction) -> Void
 	
 	var body: some View {
 		VStack {
@@ -30,11 +26,11 @@ struct EditSegmentView: View {
 			.pickerStyle(SegmentedPickerStyle())
 			
 			if (selectedOption == 1) {
-				FromTime(startMinute: $segment.startMinute)
+				FromTime(startMinute: $segment.startMinute, neighbours: $neighbours)
 			} else if (selectedOption == 2) {
 				TargetTemp(targetTemp: $segment.targetTemp)
 			} else if (selectedOption == 3) {
-				TillTime(endMinute: $segment.endMinute)
+				TillTime(startMinute: $segment.startMinute, endMinute: $segment.endMinute, neighbours: $neighbours)
 			} else {
 				TargetTemp(targetTemp: $segment.targetTemp)
 			}
@@ -44,6 +40,7 @@ struct EditSegmentView: View {
 		
 		HStack {
 			Button(action: {
+				returnAction(.cancel)
 				dismiss()
 			}) {
 				Image(systemName: "x.circle.fill")
@@ -51,9 +48,13 @@ struct EditSegmentView: View {
 					.scaledToFit()
 					.frame(width: 40, height: 40)
 			}
+			.tint(Color.gray)
 			.padding()
+			
 			Spacer()
+			
 			Button(action: {
+				returnAction(.save)
 				dismiss()
 			}) {
 				Image(systemName: "checkmark.circle.fill")
@@ -69,10 +70,11 @@ struct EditSegmentView: View {
 
 struct FromTime: View {
 	@Binding var startMinute: Int
+	@Binding var neighbours: (left: HMSegment?, right: HMSegment?)
 	
 	var body: some View {
 		VStack {
-			TimePicker(targetTime: $startMinute)
+			TimePicker(targetTime: $startMinute, source: timePickerSource.from, neighbours: $neighbours, limit: neighbours.left?.startMinute ?? 0)
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 	}
@@ -116,11 +118,13 @@ struct TargetTemp: View {
 }
 
 struct TillTime: View {
+	@Binding var startMinute: Int
 	@Binding var endMinute: Int
+	@Binding var neighbours: (left: HMSegment?, right: HMSegment?)
 	
 	var body: some View {
 		VStack {
-			TimePicker(targetTime: $endMinute)
+			TimePicker(targetTime: $endMinute, source: timePickerSource.till, neighbours: $neighbours, limit: neighbours.right?.startMinute ?? 1440)
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 	}

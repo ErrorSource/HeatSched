@@ -2,8 +2,6 @@
 //  DateTimeCalc.swift
 //  HeatSched
 //
-//  Created by Georg Kemser on 03.11.24.
-//
 
 import SwiftUI
 

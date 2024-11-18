@@ -2,8 +2,6 @@
 //  HMData.swift
 //  HeatSched
 //
-//  Created by Georg Kemser on 02.11.24.
-//
 
 import SwiftUI
 import SwiftData
@@ -15,7 +13,15 @@ enum HMWeekDay: String, CaseIterable {
 
 @Model
 class HMSegment: Identifiable {
-	var id = UUID()
+	// gk76: this is a workaround! normaly we would use:
+	// var id = UUID()
+	// but with this, the DeviceDayView will not update accordingly, if cancel-button was pressed
+	// and a modelContext.rollback() was executed
+	// (see: https://stackoverflow.com/questions/78775761/swiftdata-rollback-not-updating-the-ui)
+	var id: String {
+		"\(persistentModelID) \(startMinute) \(endMinute) \(targetTemp)"
+	}
+
 	var startMinute: Int
 	var endMinute: Int
 	var targetTemp: Double
@@ -24,6 +30,11 @@ class HMSegment: Identifiable {
 		self.startMinute = startMinute
 		self.endMinute = endMinute
 		self.targetTemp = targetTemp
+	}
+
+	func copy(with zone: NSZone? = nil) -> Any {
+		let copy = HMSegment(startMinute: startMinute, endMinute: endMinute, targetTemp: targetTemp)
+		return copy
 	}
 }
 
