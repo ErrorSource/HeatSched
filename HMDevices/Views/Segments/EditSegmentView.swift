@@ -8,6 +8,7 @@ import SwiftUI
 struct EditSegmentView: View {
 	@Bindable var segment: HMSegment
 	@Binding var neighbours: (left: HMSegment?, right: HMSegment?)
+	@Binding var chartSegments: [HMSegment]
 	
 	@Environment(\.dismiss) var dismiss
 	
@@ -26,11 +27,11 @@ struct EditSegmentView: View {
 			.pickerStyle(SegmentedPickerStyle())
 			
 			if (selectedOption == 1) {
-				FromTime(startMinute: $segment.startMinute, neighbours: $neighbours)
+				FromTime(startMinute: $segment.startMinute, neighbours: $neighbours, chartSegments: $chartSegments)
 			} else if (selectedOption == 2) {
 				TargetTemp(targetTemp: $segment.targetTemp)
 			} else if (selectedOption == 3) {
-				TillTime(startMinute: $segment.startMinute, endMinute: $segment.endMinute, neighbours: $neighbours)
+				TillTime(startMinute: $segment.startMinute, endMinute: $segment.endMinute, neighbours: $neighbours, chartSegments: $chartSegments)
 			} else {
 				TargetTemp(targetTemp: $segment.targetTemp)
 			}
@@ -71,10 +72,11 @@ struct EditSegmentView: View {
 struct FromTime: View {
 	@Binding var startMinute: Int
 	@Binding var neighbours: (left: HMSegment?, right: HMSegment?)
+	@Binding var chartSegments: [HMSegment]
 	
 	var body: some View {
 		VStack {
-			TimePicker(targetTime: $startMinute, source: timePickerSource.from, neighbours: $neighbours, limit: neighbours.left?.startMinute ?? 0)
+			TimePicker(targetTime: $startMinute, source: timePickerSource.from, neighbours: $neighbours, chartSegments: $chartSegments, leftLimit: neighbours.left?.startMinute)
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 	}
@@ -121,10 +123,11 @@ struct TillTime: View {
 	@Binding var startMinute: Int
 	@Binding var endMinute: Int
 	@Binding var neighbours: (left: HMSegment?, right: HMSegment?)
+	@Binding var chartSegments: [HMSegment]
 	
 	var body: some View {
 		VStack {
-			TimePicker(targetTime: $endMinute, source: timePickerSource.till, neighbours: $neighbours, limit: neighbours.right?.startMinute ?? 1440)
+			TimePicker(targetTime: $endMinute, source: timePickerSource.till, neighbours: $neighbours, chartSegments: $chartSegments, leftLimit: neighbours.left?.endMinute)
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 	}

@@ -43,11 +43,11 @@ struct DeviceDayView: View {
 				VStack {
 					Chart(chartSegments) {
 						LineMark(
-							x: .value("Hour", minutes2Date(minutes: $0.startMinute), unit: .hour),
+							x: .value("Hour", minutes2Date(minutes: $0.startMinute), unit: .minute),
 							y: .value("Temp", $0.targetTemp)
 						)
 						LineMark(
-							x: .value("Hour", minutes2Date(minutes: $0.endMinute), unit: .hour),
+							x: .value("Hour", minutes2Date(minutes: $0.endMinute), unit: .minute),
 							y: .value("Temp", $0.targetTemp)
 						)
 					}
@@ -85,7 +85,7 @@ struct DeviceDayView: View {
 					.listStyle(PlainListStyle())
 					// .navigationBarTitleDisplayMode(.inline)
 					.navigationDestination(for: HMSegment.self) { segment in
-						EditSegmentView(segment: segment, neighbours: getNeighbourSegments(ofSegment: segment)) { action in
+						EditSegmentView(segment: segment, neighbours: getNeighbourSegments(ofSegment: segment), chartSegments: $chartSegments) { action in
 							switch action {
 							case .save:
 								saveSegment(segment: segment)
@@ -108,7 +108,7 @@ struct DeviceDayView: View {
 								.frame(width: 40, height: 40)
 						}
 						.padding()
-						.disabled(segments.count > 10) // HM just allowes 13 segments; also substract 2 segments for virtual beginning- and ending-segments
+						.disabled(segments.last?.endMinute == 1440 || segments.count > 10) // HM just allowes 13 segments; also substract 2 segments for virtual beginning- and ending-segments
 					}
 					.frame(maxWidth: .infinity, alignment: .trailing)
 				}
